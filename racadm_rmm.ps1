@@ -8,9 +8,11 @@ $dellUrl = "https://dl.dell.com/FOLDER12236255M/1/Dell-iDRACTools-Web-WINX64-11.
 $tempPath = "C:\U2FsdGVkX18kwGCYT00BQooLg6cIwef9adL\Dell"
 $dellExe = $tempPath + "setup.exe"
 $dellPath = $tempPath + "setup.msi"
-if ($OSInfo -contains "Dell Inc."){
+if ($OSInfo -like "*Dell*"){
     if (Test-Path -Path $racadmPath -IsValid) {
     Write-Host "The application executable exists."
+
+   & $racadmPath --argument1 "racadm storage controllers" | Select-String "RAID"
 
     } else {
     Write-Host "The application executable was not found."
@@ -20,7 +22,7 @@ if ($OSInfo -contains "Dell Inc."){
     if ($error.Count -gt 0 -or -not (Test-Path -Path $dellExe)) {
     Write-Host "The file did not download successfully." -ForegroundColor Red
     }
-    Start-Process -FilePath $dellOutput -ArgumentList "/Extract:`"$dellOutput`"" -Wait
+    Start-Process -FilePath $dellPath -ArgumentList "/Extract:`"$dellPath`"" -Wait
 
     if (Test-Path -Path $dellPath -IsValid){
 
